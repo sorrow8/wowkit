@@ -3,10 +3,17 @@
 // it glows then is its glow time (a few seconds by default: one that waits for the right moment should not glow all the
 // while).
 import { OnEvent, OnGameEvent } from "@wowkit/core";
-import type { ActionBarsService, PlayerService, SpellDetailsService, SpellsService } from "@wowkit/wow";
+import {
+    attemptMulti,
+    isReadable,
+    type ActionBarsService,
+    type PlayerService,
+    type SpellDetailsService,
+    type SpellsService,
+} from "@wowkit/wow";
 import type { AddonSettingsService, AddableType } from "../settings/settings.interface";
 import type { AddedSpellsService } from "./added-spells.service";
-import { ALPHA_PROC_CUES, COOLDOWN_CUES, PROC_CUES, RACIAL_COOLDOWNS } from "./glow-cues.constants";
+import { ALPHA_PROC_CUES, COOLDOWN_CUES, PROC_CUES, RACIAL_COOLDOWNS, TARGET_TYPE_CUES } from "./glow-cues.constants";
 import { READY_MARGIN, type CooldownTrackerService } from "./cooldown-tracker.service";
 import type { StanceProcsService } from "./stance-procs.service";
 
@@ -84,9 +91,21 @@ export class GlowCuesService {
 
     private isProcUp(id: number): boolean {
         const name = this.spells.getSpellLabel(id);
+        const targetTypes = TARGET_TYPE_CUES.find(([listId]) => this.spells.getSpellLabel(listId) === name)?.[1];
+        if (targetTypes !== undefined && !this.isTargetOfType(id, targetTypes)) return false;
         const alpha = this.listAlphaProcs().find((proc) => this.spells.getSpellLabel(proc.id) === name);
         if (alpha !== undefined) return alpha.sign === "free" ? this.spellDetails.isFreeNow(id) : this.spellDetails.isInstantNow(id);
         return this.spellDetails.readUsability(id).isUsable === true || this.stanceProcs.isOpen(id);
+    }
+
+    /** Is the target an enemy of one of these creature types? When the client hides its type, can the spell reach it? */
+    private isTargetOfType(spellId: number, creatureTypes: string[]): boolean {
+        if (!this.player.hasEnemyTarget()) return false;
+        const [didSucceed, name] = attemptMulti(() => UnitCreatureType("target"));
+        if (didSucceed && isReadable(name) && type(name) === "string" && name !== "") {
+            return creatureTypes.includes(string.lower(name!));
+        }
+        return this.spellDetails.isInRange(spellId, "target") === true;
     }
 
     /**

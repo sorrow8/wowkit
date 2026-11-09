@@ -58,10 +58,17 @@ export const RACIAL_COOLDOWNS: number[] = [
 /** Procs: the spell glows while the game says it is usable (and not on cooldown). The player can switch each off. */
 export const PROC_CUES: { [classToken: string]: number[] | undefined } = {
     HUNTER: [Hunter.Counterattack, Hunter.MongooseBite],
-    PALADIN: [Paladin.HammerOfWrath],
+    PALADIN: [Paladin.HammerOfWrath, Paladin.Exorcism],
     ROGUE: [Rogue.Riposte],
     WARRIOR: [Warrior.Overpower, Warrior.Revenge, Warrior.Execute, Warrior.VictoryRush],
 };
+
+/**
+ * Procs that also need a target of a kind: the creature types they hit, in lower case as the client names them. When the
+ * client hides the target's type (it does for many NPCs), the spell's range check stands in: it says no for a target the
+ * spell cannot hit.
+ */
+export const TARGET_TYPE_CUES: [spellId: number, creatureTypes: string[]][] = [[Paladin.Exorcism, ["undead", "demon"]]];
 
 /**
  * Procs the game hides in a fight, as buffs: their spell tells instead, by turning free or instant. Alpha: the table says so.
