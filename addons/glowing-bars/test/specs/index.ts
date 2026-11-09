@@ -27,6 +27,7 @@ import "./food-buff.spec";
 import "./food-buff-learning.spec";
 import "./gathering.spec";
 import "./shield-block.spec";
+import "./cooldown-manager.spec";
 import "./defensive-execute.spec";
 import "./alpha-procs.spec";
 import "./welcome.spec";

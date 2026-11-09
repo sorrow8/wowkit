@@ -16,6 +16,7 @@ export function createDefaultSettings(): AddonSettings {
         shouldStayQuietInTowns: false,
         isAfkRainbowOn: false,
         isWelcomeDone: false,
+        shouldShowCooldownManager: false,
         roundAnimation: "breathing",
         isMissingBuffEnabled: true,
         isWeaponBuffEnabled: true,

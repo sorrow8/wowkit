@@ -79,6 +79,8 @@ export interface AddonSettings {
     shouldStayQuietInTowns: boolean;
     /** Has this character seen the welcome window? */
     isWelcomeDone: boolean;
+    /** Does the player want to see Blizzard's Cooldown Manager, which the addon runs in the background? */
+    shouldShowCooldownManager: boolean;
     /** Do the action buttons light up in rainbow colors while the player is AFK? */
     isAfkRainbowOn: boolean;
     /** What a circling glow does on a round button (Forever's gamepad bars, another addon's), where it cannot circle. */

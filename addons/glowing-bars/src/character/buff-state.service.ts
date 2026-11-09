@@ -5,6 +5,7 @@ import {
     type AuraEntry,
     type AuraRead,
     type AurasService,
+    type CooldownViewerService,
     type PlayerService,
     type SpellsService,
     isReadable,
@@ -36,6 +37,7 @@ export class BuffStateService {
         private readonly player: PlayerService,
         private readonly memory: BuffMemoryService,
         private readonly knowledge: BuffKnowledgeService,
+        private readonly cooldownViewer: CooldownViewerService,
     ) {}
 
     wipeAuraScans(): void {
@@ -64,7 +66,7 @@ export class BuffStateService {
         }
         // The client hides auras in combat (none at all, or some whose name and ID are secret): a buff we saw or cast is
         // trusted until it runs out. A list it shows in full is believed, in combat too: a buff the player cancelled is gone.
-        if (read.isUnreadable) return this.memory.isRemembered(spellId, lead);
+        if (read.isUnreadable) return this.isHiddenBuffUp(spellId, lead);
         this.memory.release(spellId, read.categories);
         return false;
     }
@@ -150,6 +152,37 @@ export class BuffStateService {
         if (!isWanted) return "other";
         if (!isOwnOnly || aura.caster === "player") return "has";
         return aura.caster === "hidden" ? "hidden" : "other";
+    }
+
+    /**
+     * Is a buff the client hides up? The icons in the Cooldown Manager know; the memory says how long it has left, and is all
+     * there is without an icon.
+     */
+    private isHiddenBuffUp(spellId: number, lead: number): boolean {
+        const isIconUp = this.readBuffIcons(spellId);
+        if (isIconUp === false) return false;
+        if (isIconUp === true && !this.memory.isRemembered(spellId)) return true;
+        return this.memory.isRemembered(spellId, lead);
+    }
+
+    /**
+     * What the icons say of a buff: of a category, of every member the player knows, as any of them counts. A member with no
+     * icon has no say: one icon can stand for several buffs (Blessing of Might's is also Greater Blessing of Might's).
+     * Undefined when no member has an icon.
+     */
+    private readBuffIcons(spellId: number): boolean | undefined {
+        const name = this.getBuffName(spellId);
+        if (name === undefined) return undefined;
+        const category = this.knowledge.findCategory(name);
+        const ids = category !== undefined ? category.members.filter((id) => this.spells.isLearned(id)) : [spellId];
+        if (ids.length === 0) return undefined;
+        let hasIcon = false;
+        for (const id of ids) {
+            const isUp = this.cooldownViewer.isBuffActive(this.getBuffName(id) ?? "");
+            if (isUp === true) return true;
+            if (isUp === false) hasIcon = true;
+        }
+        return hasIcon ? false : undefined;
     }
 
     /** The name the client gives the buff (the rank the player knows first). */

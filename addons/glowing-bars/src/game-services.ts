@@ -9,6 +9,7 @@ import {
     ButtonRegistryService,
     ButtonSearchService,
     ClockService,
+    CooldownViewerService,
     CooldownsService,
     GlowService,
     NoticeService,
@@ -39,6 +40,7 @@ export function makeGame(addon: Addon, addonName: string) {
     const spellDetails = addon.register(new SpellDetailsService());
     const cooldowns = addon.register(new CooldownsService());
     const auras = addon.register(new AurasService(spells));
+    const cooldownViewer = addon.register(new CooldownViewerService(spells));
     const buttonRegistry = addon.register(new ButtonRegistryService());
     registerPublicApi(buttonRegistry);
     const actionBars = addon.register(new ActionBarsService(clock, spells, addon.events, buttonRegistry));
@@ -59,6 +61,7 @@ export function makeGame(addon: Addon, addonName: string) {
         spellDetails,
         cooldowns,
         auras,
+        cooldownViewer,
         actionBars,
         barRefresh,
         weaponEnchants,

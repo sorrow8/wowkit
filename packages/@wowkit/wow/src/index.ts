@@ -8,6 +8,7 @@ export * from "./button-registry.service";
 export * from "./button-search.service";
 export * from "./character.service";
 export * from "./clock.service";
+export * from "./cooldown-viewer.service";
 export * from "./cooldowns.service";
 export * from "./glow.service";
 export * from "./notice.service";

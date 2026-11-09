@@ -11,6 +11,7 @@ type FeatureKey =
     | "shouldShowGreeting"
     | "shouldStayQuietInTowns"
     | "isAfkRainbowOn"
+    | "shouldShowCooldownManager"
     | "isMissingBuffEnabled"
     | "isWeaponBuffEnabled"
     | "showPartyBuffs"

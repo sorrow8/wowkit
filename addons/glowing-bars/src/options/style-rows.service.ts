@@ -167,10 +167,17 @@ export class StyleRowsService {
         return rows;
     }
 
+    /** The buffs told by the Cooldown Manager in a fight. */
+    private isBuffRow(row: StyleRow): boolean {
+        if (row.spellId !== undefined && this.fedBuffs.isFedSpell(row.spellId)) return false;
+        return row.reminderType === "missingBuff" || row.reminderType === "missingSeal" || row.reminderType === "missingTracking";
+    }
+
     /** What is experimental says so: a warrior's Execute in Defensive Stance, and the procs told by their spell. */
     private addAlphaRows(rows: StyleRow[]): void {
         if (this.player.getClassToken() === "WARRIOR") rows.push(this.createDefensiveExecuteRow());
         for (const row of rows) {
+            if (this.isBuffRow(row)) this.markAlpha(row, "TIP_ALPHA_BUFF");
             if (row.reminderType === "proc" && row.listId !== undefined && this.glowCues.isAlphaProc(row.listId))
                 this.markAlpha(row, "TIP_ALPHA_PROC");
         }

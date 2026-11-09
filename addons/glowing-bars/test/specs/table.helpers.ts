@@ -40,7 +40,7 @@ export function findLabel(world: World, label: string): FakeFrame | undefined {
     // The rows first: a type's small heading in the list of spells says the same as its row
     const isRow = (frame: FakeFrame) => world.frames.some((other) => other.parent === frame && other.frameType === "CheckButton");
     for (const frame of [...world.frames.filter((frame) => isRow(frame)), ...world.frames]) {
-        const found = frame.fontStrings.find((text) => text.text === label);
+        const found = frame.fontStrings.find((text) => text.text === label || text.text === `${label} (alpha)`);
         if (found !== undefined) return found;
     }
     return undefined;

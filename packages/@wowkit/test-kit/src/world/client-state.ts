@@ -96,6 +96,24 @@ export interface ClientState {
     /** The buffs on the player, in the order the game lists them. */
     auras: FakeAura[];
     isInCombat: boolean;
+    /** The other addons that are loaded, by name. */
+    loadedAddons: { [name: string]: boolean | undefined };
+    /** The client's options that were set, by name. */
+    cvars: { [name: string]: boolean | undefined };
+    /** The buffs the Cooldown Manager has an icon for. */
+    trackedBuffs: { spellId: number; isActive: boolean }[];
+    /** What Blizzard offers in the Cooldown Manager's Tracked Buffs. */
+    buffCatalog: { spellId: number; isHiddenByDefault: boolean }[];
+    /** The saved layouts of the Cooldown Manager, as the addon reads them; undefined: none yet. */
+    layoutData: { [field: number]: unknown } | undefined;
+    /** Blizzard's layout of the Cooldown Manager for the character's spec. */
+    viewerLayout: number;
+    /** Have the saved layouts of the Cooldown Manager loaded? */
+    isViewerDataLoaded: boolean;
+    /** How often the layouts of the Cooldown Manager were saved. */
+    viewerSaves: number;
+    /** The last opacity given to the windows of the Cooldown Manager. */
+    viewerAlpha: number | undefined;
     /** In combat the game hides the auras: the list comes back empty. */
     areAurasHidden: boolean;
     /** In combat the game hides the spell cooldowns: no answer. */
@@ -192,6 +210,15 @@ export function createClientState(): ClientState {
         isFirstRankByName: false,
         auras: [],
         isInCombat: false,
+        loadedAddons: {},
+        cvars: {},
+        trackedBuffs: [],
+        buffCatalog: [],
+        layoutData: undefined,
+        viewerLayout: 1,
+        isViewerDataLoaded: true,
+        viewerSaves: 0,
+        viewerAlpha: undefined,
         areAurasHidden: false,
         areCooldownsHidden: false,
         spellCosts: {},

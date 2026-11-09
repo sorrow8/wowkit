@@ -64,6 +64,7 @@ On the Settings page (_Options > AddOns > Glowing Bars_):
 
 *   **Messages**: text size, vertical position, zoom in and out, two kinds of pulse, and one line per type
 *   **Rainbow when AFK** (off by default): your buttons light up in rainbow colors while you are away
+*   **Show Blizzard's Cooldown Manager** (off by default): Glowing Bars runs it in the background to see your buffs in a fight, and keeps its icons out of sight. Tick this to see them
 *   **Circling on round buttons**: breathing or none, where a glow cannot run around the button
 *   **Action bars that glow**: turn any of the eight bars off (your UI addon's bars too)
 *   **Faded until they glow**: any of the eight bars stays faint until one of its buttons glows, so a bar in the middle of your screen shows only what's due

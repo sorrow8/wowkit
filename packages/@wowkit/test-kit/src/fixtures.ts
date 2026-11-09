@@ -28,6 +28,7 @@ export const ASPECT_OF_THE_MONKEY = spell(13163, "Aspect of the Monkey", 132160)
 export const ASPECT_OF_THE_WILD = spell(20043, "Aspect of the Wild", 136074);
 export const ROCKBITER_WEAPON = spell(8017, "Rockbiter Weapon", 136086);
 export const LIGHTNING_SHIELD = spell(324, "Lightning Shield", 136051);
+export const WATER_SHIELD = spell(408510, "Water Shield", 132315);
 export const INSTANT_POISON = spell(8679, "Instant Poison", 132273);
 export const DEADLY_POISON = spell(2823, "Deadly Poison", 132290);
 

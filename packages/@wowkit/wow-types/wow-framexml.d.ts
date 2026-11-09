@@ -215,3 +215,30 @@ declare function CreateSettingsButtonInitializer(
     tooltip: string | undefined,
     addSearchTags: boolean,
 ): SettingsInitializer;
+
+/** An icon or bar of Blizzard's Cooldown Manager. */
+interface CooldownViewerItem extends Frame {
+    cooldownID?: number;
+    IsActive(): boolean;
+}
+
+/** A window of Blizzard's Cooldown Manager (BuffIconCooldownViewer...). */
+interface CooldownViewer extends Frame {
+    itemFramePool?: { EnumerateActive(): LuaIterable<CooldownViewerItem> };
+}
+
+/** What the settings window of Blizzard's Cooldown Manager works on. */
+interface CooldownViewerSettingsDataProvider {
+    /** False until the saved layouts have loaded. */
+    GetLayoutManager(): object | false;
+}
+
+/** The settings window of Blizzard's Cooldown Manager. */
+interface CooldownViewerSettingsFrame extends Frame {
+    GetDataProvider(): CooldownViewerSettingsDataProvider;
+}
+
+/** Blizzard's helpers for the Cooldown Manager (_G.CooldownViewerUtil). */
+interface CooldownViewerUtilFunctions {
+    GetCurrentClassAndSpecTag(this: void): number | undefined;
+}

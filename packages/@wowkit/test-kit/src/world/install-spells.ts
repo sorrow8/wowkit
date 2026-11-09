@@ -115,6 +115,7 @@ export function installSpells(state: ClientState): void {
     });
 
     defineNamespace<typeof C_AddOns>("C_AddOns", {
+        IsAddOnLoaded: (name) => $multi(state.loadedAddons[name] === true, state.loadedAddons[name] === true),
         GetAddOnMetadata: () => "test",
     });
 }
