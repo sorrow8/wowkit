@@ -3,14 +3,7 @@
 // it glows then is its glow time (a few seconds by default: one that waits for the right moment should not glow all the
 // while).
 import { OnEvent, OnGameEvent } from "@wowkit/core";
-import {
-    attemptMulti,
-    isReadable,
-    type ActionBarsService,
-    type PlayerService,
-    type SpellDetailsService,
-    type SpellsService,
-} from "@wowkit/wow";
+import type { ActionBarsService, PlayerService, SpellDetailsService, SpellsService, UnitsService } from "@wowkit/wow";
 import type { AddonSettingsService, AddableType } from "../settings/settings.interface";
 import type { AddedSpellsService } from "./added-spells.service";
 import { ALPHA_PROC_CUES, COOLDOWN_CUES, PROC_CUES, RACIAL_COOLDOWNS, TARGET_TYPE_CUES } from "./glow-cues.constants";
@@ -32,6 +25,7 @@ export class GlowCuesService {
         private readonly settings: AddonSettingsService,
         private readonly addedSpells: AddedSpellsService,
         private readonly stanceProcs: StanceProcsService,
+        private readonly units: UnitsService,
     ) {}
 
     /**
@@ -101,10 +95,8 @@ export class GlowCuesService {
     /** Is the target an enemy of one of these creature types? When the client hides its type, can the spell reach it? */
     private isTargetOfType(spellId: number, creatureTypes: string[]): boolean {
         if (!this.player.hasEnemyTarget()) return false;
-        const [didSucceed, name] = attemptMulti(() => UnitCreatureType("target"));
-        if (didSucceed && isReadable(name) && type(name) === "string" && name !== "") {
-            return creatureTypes.includes(string.lower(name!));
-        }
+        const creatureType = this.units.getCreatureType("target");
+        if (creatureType !== undefined) return creatureTypes.includes(creatureType);
         return this.spellDetails.isInRange(spellId, "target") === true;
     }
 

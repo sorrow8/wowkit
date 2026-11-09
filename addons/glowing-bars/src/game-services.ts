@@ -21,6 +21,7 @@ import {
     SpellRefreshService,
     SpellsService,
     TooltipService,
+    UnitsService,
     WeaponEnchantsService,
 } from "@wowkit/wow";
 import { registerPublicApi } from "./api/public-api";
@@ -49,6 +50,7 @@ export function makeGame(addon: Addon, addonName: string) {
     const barFade = addon.register(new BarFadeService(glow, buttonRegistry));
     const notice = addon.register(new NoticeService(addonName));
     const tooltips = addon.register(new TooltipService());
+    const units = new UnitsService(player);
     return {
         clock,
         player,
@@ -67,6 +69,7 @@ export function makeGame(addon: Addon, addonName: string) {
         notice,
         tooltips,
         buttonSearch,
+        units,
     };
 }
 export type Game = ReturnType<typeof makeGame>;

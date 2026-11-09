@@ -131,7 +131,17 @@ function makeReminders(addon: Addon, addonName: string, game: Game, texts: Texts
     addon.register(new AfkRainbowService(game.buttonSearch, game.glow, game.clock, game.player, settings));
     const stanceProcs = addon.register(new StanceProcsService(game.player, game.spells, game.clock, addon.events));
     const glowCues = addon.register(
-        new GlowCuesService(game.player, game.spells, game.spellDetails, game.actionBars, tracker, settings, addedSpells, stanceProcs),
+        new GlowCuesService(
+            game.player,
+            game.spells,
+            game.spellDetails,
+            game.actionBars,
+            tracker,
+            settings,
+            addedSpells,
+            stanceProcs,
+            game.units,
+        ),
     );
     const fedBuffs = addon.register(
         new FedBuffsService(addedSpells, game.spells, buffs.state, game.player, game.clock, settings, game.actionBars),
