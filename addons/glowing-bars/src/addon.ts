@@ -190,9 +190,7 @@ function makeTick(addon: Addon, addonName: string, game: Game, texts: Texts, buf
     const { player, spells, actionBars, glow, notice } = game;
     const curves = new ValueCurvesService();
     addon.register(new DefensiveExecuteService(player, spells, actionBars, glow, notice, curves, styles, settings, locale, buffs.idle));
-    addon.register(
-        new LowHealthDefenseService(player, spells, actionBars, glow, curves, styles, settings, reminders.glowCues, buffs.idle),
-    );
+    addon.register(new LowHealthDefenseService(player, spells, actionBars, glow, curves, styles, settings, reminders.glowCues, buffs.idle));
     const refresh = addon.register(new RefreshService(tick, shower, buffs.state, game.clock, game.barRefresh));
     addon.register(new DisplayService(shower, tick));
     addon.register(new EquipmentService(refresh, game.player, game.weaponEnchants, reminders.weapon));
